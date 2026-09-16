@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% block title %}避難所新規登録{% endblock %}
+{% block brand %}避難所新規登録{% endblock %}
+
+{% block content %}
+<style>
+  .new-register-form {
+    color: #202020;
+    max-width: 1200px;
+    margin: 28px auto 0;
+  }
+
+  .form-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 0.9fr);
+    gap: 42px;
+  }
+
+  .form-column {
+    display: grid;
+    gap: 18px;
+    align-content: start;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) minmax(180px, 230px);
+    align-items: center;
+    gap: 22px;
+  }
+
+  .form-row label,
+  .feature-row label {
+    font-size: 1.22rem;
+    font-weight: 700;
+  }
+
+  input,
+  select {
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid #a7a7a7;
+    background: #fff;
+    color: #202020;
+    padding: 8px 12px;
+    font: inherit;
+  }
+
+  .address-row {
+    grid-template-columns: minmax(220px, 1fr) minmax(180px, 230px);
+  }
+
+  .postal-controls {
+    display: flex;
+    gap: 12px;
+  }
+
+  .postal-controls input {
+    min-width: 0;
+  }
+
+  .secondary-button,
+  .register-button {
+    border: 1px solid #c7d9e8;
+    background: #deebf7;
+    color: #202020;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+  }
+
+  .secondary-button {
+    min-width: 116px;
+    padding: 8px 14px;
+  }
+
+  .image-placeholder {
+    min-height: 300px;
+    display: grid;
+    place-items: center;
+    border: 1px solid #a7a7a7;
+    color: #777;
+    font-size: 1.15rem;
+  }
+
+  .feature-column {
+    display: grid;
+    gap: 28px;
+    align-content: start;
+  }
+
+  .feature-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 210px;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .checkbox-row input {
+    width: 18px;
+    min-height: 18px;
+  }
+
+  .form-message {
+    margin: 18px 0 0;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .register-button-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+  }
+
+  .register-button {
+    min-width: 240px;
+    min-height: 52px;
+    padding: 10px 30px;
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 760px) {
+    .form-layout {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+
+    .form-row,
+    .feature-row {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .image-placeholder {
+      min-height: 220px;
+    }
+  }
+</style>
+
+<form class="new-register-form" method="post">
+  <input type="hidden" name="mode" value="new">
+
+  <div class="form-layout">
+    <div class="form-column">
+      <div class="form-row">
+        <label for="building-name">建物名</label>
+        <input id="building-name" name="building_name" type="text" placeholder="（自由入力）" required>
+      </div>
+
+      <div class="form-row">
+        <label for="postal-code">郵便番号</label>
+        <div class="postal-controls">
+          <input id="postal-code" name="postal_code" type="text" placeholder="（自由入力）">
+          <button class="secondary-button" type="button">住所検索</button>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label for="address">住所</label>
+        <input id="address" name="address" type="text" placeholder="（自由入力）">
+      </div>
+
+      <div class="form-row">
+        <label for="capacity">収容人数</label>
+        <input id="capacity" name="capacity" type="number" min="0" placeholder="（自由入力）">
+      </div>
+
+      <div class="form-row">
+        <label for="availability">空き状況</label>
+        <select id="availability" name="availability">
+          <option value="">選択してください</option>
+          <option value="空きあり">空きあり</option>
+          <option value="残りわずか">残りわずか</option>
+          <option value="満員">満員</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label for="male-toilets">男性トイレの数</label>
+        <input id="male-toilets" name="male_toilets" type="number" min="0" placeholder="（自由入力）">
+      </div>
+
+      <div class="form-row">
+        <label for="female-toilets">女性トイレの数</label>
+        <input id="female-toilets" name="female_toilets" type="number" min="0" placeholder="（自由入力）">
+      </div>
+
+      <div class="form-row">
+        <label for="multi-purpose-toilets">多目的トイレの数</label>
+        <input id="multi-purpose-toilets" name="multi_purpose_toilets" type="number" min="0" placeholder="（自由入力）">
+      </div>
+    </div>
+
+    <div class="feature-column">
+      <div class="image-placeholder" aria-label="画像">画像</div>
+
+      <div class="feature-row">
+        <label for="barrier-free">バリアフリー対応あり</label>
+        <select id="barrier-free" name="barrier_free">
+          <option value="">選択してください</option>
+          <option value="あり">あり</option>
+          <option value="一部あり">一部あり</option>
+          <option value="なし">なし</option>
+        </select>
+      </div>
+
+      <label class="checkbox-row" for="pets-allowed">
+        <span>ペット受け入れ可</span>
+        <input id="pets-allowed" name="pets_allowed" type="checkbox">
+      </label>
+    </div>
+  </div>
+
+  {% if success or error %}
+    <p class="form-message">{{ message }}</p>
+  {% endif %}
+
+  <div class="register-button-wrap">
+    <button class="register-button" type="submit">登録</button>
+  </div>
+</form>
+{% endblock %}

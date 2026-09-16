@@ -286,9 +286,17 @@ def logout():
 @app.route('/shelter_register', methods=['GET', 'POST'])
 @login_required
 def shelter_register():
+    mode = request.args.get('mode') or request.form.get('mode')
+
     if request.method == 'POST':
-        name = request.form.get('name', '').strip()
+        name = (request.form.get('building_name') or request.form.get('name', '')).strip()
         if not name:
+            if mode == 'new':
+                return render_template(
+                    'shelter_new.html',
+                    error=True,
+                    message='建物名を入力してください。'
+                )
             return render_template(
                 'shelter_register.html',
                 error=True,
@@ -296,14 +304,35 @@ def shelter_register():
             )
 
         next_id = max((shelter.get('id', 0) for shelter in shelters), default=0) + 1
-        shelters.append({'id': next_id, 'name': name})
+        shelter = {'id': next_id, 'name': name}
+        if mode == 'new':
+            shelter.update({
+                'postal_code': request.form.get('postal_code', '').strip(),
+                'address': request.form.get('address', '').strip(),
+                'capacity': request.form.get('capacity', '').strip(),
+                'availability': request.form.get('availability', ''),
+                'male_toilets': request.form.get('male_toilets', '').strip(),
+                'female_toilets': request.form.get('female_toilets', '').strip(),
+                'multi_purpose_toilets': request.form.get('multi_purpose_toilets', '').strip(),
+                'barrier_free': request.form.get('barrier_free', ''),
+                'pets_allowed': request.form.get('pets_allowed') == 'on',
+            })
+        shelters.append(shelter)
         save_shelters()
+        if mode == 'new':
+            return render_template(
+                'shelter_new.html',
+                success=True,
+                message='避難所を登録しました。'
+            )
         return render_template(
             'shelter_register.html',
             success=True,
             message='避難所を登録しました。'
         )
 
+    if mode == 'new':
+        return render_template('shelter_new.html')
     return render_template('shelter_register.html')
 
 # 避難所検索ページ

@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --header-blue: #0a4d7a;
-      --header-blue-strong: #083a5b;
+      --header-blue: #d1edfe;
+      --header-blue-strong: #d1edfe;
       --page-bg: #eff1f3;
       --card-bg: #f7f8f9;
       --panel-border: #dfe5eb;
@@ -45,7 +45,7 @@
     .app-header .brand {
       font-size: clamp(1.4rem, 2vw, 2.2rem);
       font-weight: 800;
-      color: #fff;
+      color: #202020;
       letter-spacing: 0.04em;
       margin: 0;
     }
@@ -81,27 +81,54 @@
 
     .nav-inline {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
       align-items: center;
       font-size: 0.95rem;
-      color: var(--text-sub);
+      color: #202020;
       margin-bottom: 24px;
     }
 
     .nav-inline a {
-      color: var(--text-sub);
+      color: #202020;
+      background: #fffad9;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-weight: 700;
     }
 
     .nav-inline .status {
-      margin-left: 8px;
-      color: var(--text-main);
+      color: #202020;
+      font-weight: 700;
+      margin-left: 0;
+    }
+
+    .nav-inline .auth-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #fffad9;
+      border-radius: 999px;
+      padding: 8px 16px;
+      color: #202020;
+      font-weight: 700;
+    }
+
+    .nav-inline .separator {
+      display: none;
+    }
+
+    .nav-inline .auth-link {
+      color: #202020;
+      padding: 0;
+      background: transparent;
+      font-weight: 700;
     }
   </style>
 </head>
 <body>
   <header class="app-header">
-    <h1 class="brand">防災アプリ</h1>
+    <h1 class="brand">{% block brand %}防災アプリ{% endblock %}</h1>
     <button class="menu-button" type="button" aria-label="メニューを開く">
       <span></span>
       <span></span>
@@ -112,20 +139,22 @@
   <main>
     <nav class="nav-inline" aria-label="ナビゲーション">
       <a href="/">ホーム</a>
-      <span>|</span>
+      <span class="separator">|</span>
       <a href="/shelter_search">避難所検索</a>
-      <span>|</span>
+      <span class="separator">|</span>
       <a href="/shelter_register">避難所登録</a>
-      <span>|</span>
+      <span class="separator">|</span>
       <a href="/board">指示・発信ボード</a>
       {% if session.logged_in %}
-        <span>|</span>
-        <span class="status">ログイン中{% if session.username %}（{{ session.username }}）{% endif %}</span>
-        <a href="/logout">ログアウト</a>
+        <span class="auth-group">
+          <span class="status">ログイン中{% if session.username %}（{{ session.username }}）{% endif %}</span>
+          <a class="auth-link" href="/logout">[ログアウト]</a>
+        </span>
       {% else %}
-        <span>|</span>
-        <span class="status">未ログイン</span>
-        <a href="/login">ログイン</a>
+        <span class="auth-group">
+          <span class="status">未ログイン</span>
+          <a class="auth-link" href="/login">[ログイン]</a>
+        </span>
       {% endif %}
     </nav>
 
